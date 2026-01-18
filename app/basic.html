@@ -4,32 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        .container {
-            display: flex;
-            /* flex-direction: row|column; */
-            align-items: center;
-            /* flex-start, flex-end */
-            justify-content: center;
-            /* space-between, space-around */
-            gap: 10px;
-            margin: auto;
-            width: 1000px;
-            height: 500px;
-            background: silver;
-        }
-        .box {
-            width: 200px;
-            height: 200px;
-            background: deeppink;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-    </div>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <button onclick="hello()">Button</button>
+
+    <script>
+        function hello() {
+            var p = document.querySelector("p");
+            p.textContent = "Hello JavaScript";
+            p.style.background = "cyan";
+            p.style.padding = "20px";
+            p.style.borderLeft = "5px solid darkblue";
+        }
+    </script>
 </body>
 </html>
