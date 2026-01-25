@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar bg-dark navbar-dark">
+        <div class="container" style="max-width: 600px">
+            <a href="#" class="navbar-brand">
+                Todo <span class="badge bg-danger rounded-pill ms-2">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 600px">
+        <form class="input-group my-4">
+            <input type="text" class="form-control">
+            <button class="btn btn-dark">Add</button>
+        </form>
+        
+        <ul id="todo" class="list-group"></ul>
+        <ul id="done" class="list-group mt-4 opacity-50"></ul>
+    </div>
+
+    <script>
+        let data = getData();
+        data.map(item => createItem(item.text, item.done));
+        updateCount();
+
+        function getData() {
+            return JSON.parse(localStorage.getItem("data")) || [];
+        }
+
+        function saveData(text) {
+            let data = getData();
+            data.push({ text, done: false });
+            localStorage.setItem("data", JSON.stringify(data));
+        }
+
+        function removeData(text) {
+            let data = getData();
+            let result = data.filter(item => item.text != text);
+            localStorage.setItem("data", JSON.stringify(result));
+        }
+
+        function checkData(text) {
+            let data = getData();
+            let result = data.map(item => {
+                if(item.text == text) item.done = true;
+                return item;
+            });
+            localStorage.setItem("data", JSON.stringify(result));
+        }
+
+        function updateCount() {
+            document.querySelector(".badge").textContent = 
+                document.querySelectorAll("#todo li").length;
+        }
+
+        document.querySelector("form").onsubmit = e => {
+            e.preventDefault();
+
+            let text = document.querySelector("input").value;
+            if(text == "") return false;
+
+            createItem(text);
+            updateCount();
+            saveData(text);
+
+            e.currentTarget.reset();
+        }
+
+        function createItem(text, done = false) {
+            let li = document.createElement("li");
+            li.classList.add("list-group-item");
+            li.textContent = text;
+
+            if(done == false) {
+                let check = document.createElement("a");
+                check.setAttribute("href", "#");
+                check.classList.add("fa-solid", "fa-check", "me-2", "float-start");
+                check.onclick = () => {
+                    document.querySelector("#done").appendChild(li);
+                    check.remove();
+                    updateCount();
+                    checkData(text);
+                }
+                li.appendChild(check);
+            }
+
+            let del = document.createElement("a");
+            del.setAttribute("href", "#");
+            del.classList.add("fa-solid", "fa-trash", "text-danger", "float-end");
+            del.onclick = () => {
+                li.remove();
+                updateCount();
+                removeData(text);
+            }
+            li.appendChild(del);
+
+            if(done) {
+                document.querySelector("#done").appendChild(li);
+            } else {
+                document.querySelector("#todo").appendChild(li);
+            }
+        }
+    </script>
+</body>
+</html>
