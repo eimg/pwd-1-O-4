@@ -72,6 +72,12 @@ $users = $table->all();
                     </td>
                     <td>
                         <div class="btn-group">
+                            <?php if ($user->suspended): ?>
+                                <a href="_actions/unsuspend.php?id=<?= $user->id ?>" class="btn btn-warning">Ban</a>
+                            <?php else: ?>
+                                <a href="_actions/suspend.php?id=<?= $user->id ?>" class="btn btn-outline-warning">Ban</a>
+                            <?php endif ?>
+
                             <a href="_actions/delete.php?id=<?= $user->id ?>" class="btn btn-sm btn-outline-danger">Delete</a>
                         </div>
                     </td>
