@@ -71,14 +71,30 @@ $users = $table->all();
                         <?php endif ?>
                     </td>
                     <td>
-                        <div class="btn-group">
-                            <?php if ($user->suspended): ?>
-                                <a href="_actions/unsuspend.php?id=<?= $user->id ?>" class="btn btn-warning">Ban</a>
-                            <?php else: ?>
-                                <a href="_actions/suspend.php?id=<?= $user->id ?>" class="btn btn-outline-warning">Ban</a>
+                        <div class="btn-group dropdown">
+                            <?php if ($auth->role_id == 3): ?>
+                                <a href="#" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">Role</a>
+                                <div class="dropdown-menu">
+                                    <a href="_actions/role.php?id=<?= $user->id ?>&role=1"
+                                        class="dropdown-item">User</a>
+                                    <a href="_actions/role.php?id=<?= $user->id ?>&role=2"
+                                        class="dropdown-item">Manager</a>
+                                    <a href="_actions/role.php?id=<?= $user->id ?>&role=3"
+                                        class="dropdown-item">Admin</a>
+                                </div>
                             <?php endif ?>
 
-                            <a href="_actions/delete.php?id=<?= $user->id ?>" class="btn btn-sm btn-outline-danger">Delete</a>
+                            <?php if ($auth->role_id >= 2): ?>
+                                <?php if ($user->suspended): ?>
+                                    <a href="_actions/unsuspend.php?id=<?= $user->id ?>" class="btn btn-sm btn-warning">Ban</a>
+                                <?php else: ?>
+                                    <a href="_actions/suspend.php?id=<?= $user->id ?>" class="btn btn-sm btn-outline-warning">Ban</a>
+                                <?php endif ?>
+                            <?php endif ?>
+
+                            <?php if ($auth->role_id == 3): ?>
+                                <a href="_actions/delete.php?id=<?= $user->id ?>" class="btn btn-sm btn-outline-danger">Delete</a>
+                            <?php endif ?>
                         </div>
                     </td>
                 </tr>
