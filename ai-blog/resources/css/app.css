@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom utilities for better responsive design */
+@layer utilities {
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .aspect-video {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+/* Enhanced hover effects */
+@layer components {
+    .card-hover {
+        @apply transition-all duration-300 ease-in-out;
+    }
+    
+    .card-hover:hover {
+        @apply transform -translate-y-1 shadow-xl;
+    }
+}
