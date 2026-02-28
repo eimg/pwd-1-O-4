@@ -15,6 +15,7 @@
                 <div class="card-body">
                     <h3 class="card-title">{{ $article->title }}</h3>
                     <div class="text-muted">
+                        <b class="text-success">{{ $article->user->name }}</b>,
                         Category: {{ $article->category->name }},
                         Comments: {{ count($article->comments) }},
                         {{ $article->created_at }}

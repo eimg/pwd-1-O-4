@@ -16,8 +16,11 @@
             <input type="text" class="form-control mb-2" name="title" placeholder="Title">
             <textarea class="form-control mb-2" name="body" placeholder="Body"></textarea>
             <select class="form-select mb-2" name="category_id">
-                <option value="1">News</option>
-                <option value="2">Tech</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">
+                        {{ $category->name }}
+                    </option>
+                @endforeach
             </select>
 
             <button class="btn btn-primary">Add Article</button>

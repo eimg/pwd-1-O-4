@@ -2,20 +2,30 @@
 
 @section("content")
     <div class="container" style="max-width: 600px">
+
+        @if(session("warn"))
+            <div class="alert alert-warning">
+                {{ session("warn") }}
+            </div>
+        @endif
+
         <div class="card mb-2 bg-white border-primary">
             <div class="card-body">
                 <h3 class="card-title">{{ $article->title }}</h3>
                 <div class="text-muted">
+                    <b class="text-success">{{ $article->user->name }}</b>,
                     Category: {{ $article->category->name }},
                     {{ $article->created_at }}
                 </div>
                 <p>{{ $article->body }}</p>
                 
                 @auth
-                    <a href="{{ url("/articles/delete/$article->id") }}"
-                        class="btn btn-sm btn-outline-danger">
-                        Delete
-                    </a>
+                    @can("delete-article", $article)
+                        <a href="{{ url("/articles/delete/$article->id") }}"
+                            class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>
+                    @endcan
                 @endauth
             </div>
         </div>
@@ -27,10 +37,13 @@
             @foreach($article->comments as $comment)
                 <li class="list-group-item">
                     @auth
-                        <a href="{{ url("/comments/delete/$comment->id") }}"
-                            class="btn-close float-end"></a>
+                        @can("delete-comment", $comment)
+                            <a href="{{ url("/comments/delete/$comment->id") }}"
+                                class="btn-close float-end"></a>
+                        @endcan
                     @endauth
-
+                    
+                    <b class="text-success">{{ $comment->user->name }}</b> -
                     {{ $comment->content }}
                 </li>
             @endforeach
