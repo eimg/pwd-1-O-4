@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container" style="max-width: 600px">
             <a href="#" class="navbar-brand">Category</a>
         </div>
     </nav>
-    
+
     <div class="container" style="max-width: 600px">
         <form class="input-group my-4">
             <input type="text" class="form-control">
@@ -27,17 +29,57 @@
 
     <script>
         const api = "http://localhost:8000/api/categories";
+        const token = "3|UvdVEfCtU81LSP8Eq32sQcTc6Xc9qPTumOrV3gSIbb642036";
 
-        fetch(api)
-            .then(res => res.json())
-            .then(data => data.map(item => createItem(item)));
-        
+        fetch(api, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(res => res.json())
+        .then(data => data.map(item => createItem(item)));
+
+        document.querySelector("form").onsubmit = e => {
+            e.preventDefault();
+            const name = document.querySelector("input").value;
+            if (name == "") return false;
+
+            fetch(api, {
+                method: 'POST',
+                body: JSON.stringify({ name }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then(res => res.json()).then(item => {
+                createItem(item);
+            });
+
+            e.currentTarget.reset();
+        }
+
         function createItem(item) {
             const li = document.createElement("li");
             li.classList.add("list-group-item");
             li.textContent = item.name;
+
+            const del = document.createElement("a");
+            del.setAttribute("href", "#");
+            del.classList.add("fa-solid", "fa-trash", "text-danger", "float-end");
+            del.onclick = () => {
+                fetch(`${api}/${item.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                li.remove();
+            }
+            li.appendChild(del);
+
             document.querySelector("#list").appendChild(li);
         }
     </script>
 </body>
+
 </html>
